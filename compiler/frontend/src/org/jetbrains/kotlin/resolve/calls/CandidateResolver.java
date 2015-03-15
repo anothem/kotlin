@@ -153,6 +153,11 @@ public class CandidateResolver {
 
             candidateCall.setResultingSubstitutor(substitutor);
         }
+        else if (candidateCall.hasKnownTypeParametersSubstitutor()) {
+            TypeSubstitutor substitutor = candidateCall.getKnownTypeParametersSubstitutor();
+            assert substitutor != null : "Candidate should have known TP substitutor";
+            candidateCall.setResultingSubstitutor(substitutor);
+        }
 
         if (candidateCall.hasTypeParametersToInfer()) {
             candidateCall.addStatus(inferTypeArguments(context));

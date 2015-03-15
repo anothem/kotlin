@@ -77,6 +77,7 @@ public class ResolvedCallImpl<D extends CallableDescriptor> implements MutableRe
     private final ReceiverValue dispatchReceiver; // receiver object of a method
     private final ReceiverValue extensionReceiver; // receiver of an extension function
     private final ExplicitReceiverKind explicitReceiverKind;
+    private final TypeSubstitutor knownTypeParametersSubstitutor;
 
     private final Map<TypeParameterDescriptor, JetType> typeArguments = Maps.newLinkedHashMap();
     private final Map<ValueParameterDescriptor, ResolvedValueArgument> valueArguments = Maps.newLinkedHashMap();
@@ -101,6 +102,7 @@ public class ResolvedCallImpl<D extends CallableDescriptor> implements MutableRe
         this.dispatchReceiver = candidate.getDispatchReceiver();
         this.extensionReceiver = candidate.getExtensionReceiver();
         this.explicitReceiverKind = candidate.getExplicitReceiverKind();
+        this.knownTypeParametersSubstitutor = candidate.getKnownTypeParametersResultingSubstitutor();
         this.trace = trace;
         this.tracing = tracing;
         this.dataFlowInfoForArguments = dataFlowInfoForArguments;
@@ -327,6 +329,18 @@ public class ResolvedCallImpl<D extends CallableDescriptor> implements MutableRe
     @Override
     public boolean hasTypeParametersToInfer() {
         return getCall().getTypeArguments().isEmpty() &&
-               !getCandidateDescriptor().getTypeParameters().isEmpty();
+               !getCandidateDescriptor().getTypeParameters().isEmpty() &&
+               !hasKnownTypeParametersSubstitutor();
+    }
+
+    @Override
+    public boolean hasKnownTypeParametersSubstitutor() {
+        return getKnownTypeParametersSubstitutor() != null;
+    }
+
+    @Override
+    @Nullable
+    public TypeSubstitutor getKnownTypeParametersSubstitutor() {
+        return knownTypeParametersSubstitutor;
     }
 }

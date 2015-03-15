@@ -57,6 +57,9 @@ public interface MutableResolvedCall<D extends CallableDescriptor> extends Resol
     void setResultingSubstitutor(@NotNull TypeSubstitutor substitutor);
 
     boolean hasTypeParametersToInfer();
+    boolean hasKnownTypeParametersSubstitutor();
+    @Nullable
+    TypeSubstitutor getKnownTypeParametersSubstitutor();
 
     //todo remove: use value to parameter map status
     boolean hasInferredReturnType();

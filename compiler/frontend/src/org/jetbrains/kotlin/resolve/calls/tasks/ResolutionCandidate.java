@@ -16,14 +16,15 @@
 
 package org.jetbrains.kotlin.resolve.calls.tasks;
 
-import com.google.common.collect.Lists;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.descriptors.CallableDescriptor;
 import org.jetbrains.kotlin.psi.Call;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
+import org.jetbrains.kotlin.types.JetType;
+import org.jetbrains.kotlin.types.TypeSubstitutor;
 
 import java.util.Collection;
-import java.util.List;
 
 import static org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue.NO_RECEIVER;
 
@@ -33,6 +34,7 @@ public class ResolutionCandidate<D extends CallableDescriptor> {
     private ReceiverValue dispatchReceiver; // receiver object of a method
     private ReceiverValue extensionReceiver; // receiver of an extension function
     private ExplicitReceiverKind explicitReceiverKind;
+    private TypeSubstitutor knownTypeParametersResultingSubstitutor = null;
 
     private ResolutionCandidate(
             @NotNull Call call, @NotNull D descriptor, @NotNull ReceiverValue dispatchReceiver,
@@ -93,6 +95,15 @@ public class ResolutionCandidate<D extends CallableDescriptor> {
     @NotNull
     public ExplicitReceiverKind getExplicitReceiverKind() {
         return explicitReceiverKind;
+    }
+
+    @Nullable
+    public TypeSubstitutor getKnownTypeParametersResultingSubstitutor() {
+        return knownTypeParametersResultingSubstitutor;
+    }
+
+    public void setKnownTypeParametersResultingSubstitutor(@Nullable TypeSubstitutor knownTypeParametersResultingSubstitutor) {
+        this.knownTypeParametersResultingSubstitutor = knownTypeParametersResultingSubstitutor;
     }
 
     @Override
